@@ -1,31 +1,41 @@
-# Path OS — Climate-Aware Navigation Command Center
+# Path OS — Climate-Aware Command Center
 
-Path OS is a full-stack, climate-aware web navigation system designed to empower urban travelers by visualizing real-time and mock ecological datasets, including Air Quality Index (AQI), weather patterns, building shadow footprints, noise levels, and emergency shelter locations.
+Path OS is a full-stack, climate-aware urban navigation system designed to empower travelers by orchestrating real-time and mock ecological datasets, including Air Quality Index (AQI), weather patterns, building shadow footprints, noise levels, and emergency shelter locations.
 
-With two primary route calculation mechanisms (**Pulse** and **Haven**), it offers users the choice between the fastest conventional route and a maximally protected, climate-hazard-avoiding trajectory.
+The platform provides a state-of-the-art command-center HUD that dynamically routes commuters using two specialized modes: **Fastest (Pulse)** (raw speed optimization via OSRM) and **Haven** (safe, hazard-avoiding routing via OpenRouteService).
 
 ---
 
 ## 🌟 Key Feature Modules
 
-1. **AirGuard (Ecology Shield & Compass)**
-   * **Online Dashboard**: A HUD panel displaying live Air Quality Index (AQI) scores, PM2.5 details, and a dynamic safety indicator.
-   * **Offline Compass**: Under network loss, AirGuard automatically takes over the full viewport, transitioning into a fallback compass that points towards the nearest emergency shelter using local spatial indices.
+1. **Secure Operator Access Control**
+   * **HUD Login Gate**: A glassmorphic authorization overlay securing dashboard operations. Simulates authentication checks and uplink establishment.
+   * **Profile & Identity**: Displays operator session metadata and supports clean session logout controls.
 
-2. **NavQuiet (Serene vs. Noise Layers)**
-   * Displays acoustic mappings, marking high-decibel corridors and quiet serene zones.
-   * Haven routing automatically steers clear of high-noise corridors to ensure a quiet, peaceful walk.
+2. **Left-Aligned HUD Panel & Swapped Header**
+   * Stretched full-height sidebar layout (`top-4` to `bottom-16`) positioned on the left for optimal data display density.
+   * Transpositioned top header bar keeping navigation/weather indicators in focus and pushing brand identification to the right.
 
-3. **ShadeSeeker (Pedestrian Shadow Simulator)**
-   * Leverages building footprints retrieved dynamically from the OpenStreetMap Overpass API and computes simulated shadow projections based on a responsive time-of-day slider. Perfect for finding shaded paths during peak summer heat.
+3. Global Architecture & Delhi NCR MVP Configuration
+   * Centered default viewport on the **Delhi NCR region** (`lat: 28.52, lng: 77.20`) with zoom level `10` as a configure-gated demonstration zone.
+   * Structurally built on open protocols (OSM, OSRM, ORS, Open-Meteo) allowing seamless scaling to global coordinates simply by shifting center defaults and routing polygon queries.
 
-4. **AlertTicker (Crisis News Ticker)**
-   * A scrolling news banner pinned to the bottom of the interface, providing real-time hazard warnings, immediate AQI exposure updates, and major weather warnings.
+4. **Geocoded Autocomplete Location Engine**
+   * Replaced static dropdown lists with interactive origin/destination input bars.
+   * Queries the free **OpenStreetMap Nominatim Geocoding API** as you type to fetch matching coordinates.
+   * Embedded fallback index containing 20+ prominent Delhi landmark stations (Red Fort, Qutub Minar, India Gate, Lotus Temple, Saket Metro Station, etc.) for instant key-free autocompletion.
 
-5. **Empathy Scores & Dual Routing Mode**
-   * **Pulse Route**: Optimizes for raw speed and driving duration, fetching standard geometries from the public OSRM (Open Source Routing Machine) API.
-   * **Haven Route**: Optimizes for safety and peace, querying OpenRouteService (ORS) with specialized hazard polygons (avoiding severe floods and noise corridors) to construct a protected pedestrian path. Falls back gracefully to OSRM if ORS is rate-limited.
-   * **Empathy Score Panel**: Dynamically evaluates routes on factors like shaded cover, noise avoidance, flooding immunity, and clean air exposure.
+5. **Consolidated Climate Options Panel**
+   * Aggregates previously scattered modules into a single, cohesive **Climate** tab:
+     * **Air (AirGuard)**: Smog boundary overlays, AQI parameters, and health advisory guidelines.
+     * **Flood (Monsoon Matrix)**: Rain intensity gauges and flood zone overlay toggles.
+     * **Shade (ShadeSeeker)**: Dynamic solar azimuth shadow simulator with responsive timeline sliders.
+     * **Noise (NavQuiet)**: Decibel mapping and quiet serene walkway toggles.
+   * **Live API Accuracy**: Re-queries real-time weather (Open-Meteo) and AQI (OpenAQ) endpoints for your route's exact destination when calculation completes instead of maintaining static default coordinates.
+
+6. **Interactive Alert Ticker & Clock Feeds**
+   * Scroll marquee at the bottom moves at a comfortable speed (`120s`) and pauses instantly on cursor hover so operators can easily read long advisories.
+   * Active digital clocks ticking dynamically in real time across the header and ticker status bar.
 
 ---
 
@@ -33,13 +43,13 @@ With two primary route calculation mechanisms (**Pulse** and **Haven**), it offe
 
 * **Frontend**:
   * React 18 & Vite
-  * Tailwind CSS (Fluid grid layouts, custom floating glassmorphic windows, and clean typography)
+  * Tailwind CSS (Frosted glass panels, cyber-neon accents, fluid layout)
   * Leaflet & React Leaflet (Map canvas, polygon overlays, and route rendering)
   * LocalForage (Offline client-side state/persistence)
 * **Backend**:
   * Node.js & Express
   * Axios (Orchestrating upstream mapping, routing, and environmental APIs)
-  * Upstream APIs: OSRM API, OpenRouteService API, OpenWeatherMap, Open-Meteo, and OpenStreetMap Overpass (No paid API keys required)
+  * Upstream APIs (Key-free public tiers): OpenAQ API v3, Open-Meteo, OSRM API, OpenRouteService API, OpenStreetMap Overpass
 
 ---
 
@@ -58,11 +68,11 @@ Path OS/
 │   └── package.json
 └── frontend/
     ├── src/
-    │   ├── components/       # UI modules: AirGuard, ShadeSeeker, NavQuiet, etc.
+    │   ├── components/       # UI modules: AirGuard, ShadeSeeker, NavQuiet, ClimatePanel, Login
     │   ├── hooks/            # Network status check hook (online/offline status)
     │   ├── services/         # Axios API connection endpoints
     │   ├── App.jsx           # Global state orchestrator
-    │   ├── index.css         # Tailwind directives & glassmorphic custom classes
+    │   ├── index.css         # Tailwind directives & custom CSS animations
     │   └── main.jsx
     ├── tailwind.config.js
     ├── vite.config.js
@@ -95,4 +105,4 @@ cd frontend
 npm install
 npm run dev
 ```
-The client app will launch at [http://localhost:5173](http://localhost:5173). Open this URL in your web browser to access the Crisis Command Center dashboard.
+The client app will launch at [http://localhost:5173](http://localhost:5173). Open this URL in your web browser to access the Climate Navigation dashboard.

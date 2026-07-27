@@ -9,18 +9,33 @@ import { fetchRoute } from "../services/api";
 import EmpathyScore from "./EmpathyScore";
 
 const LOCAL_GEOCODE_FALLBACK = [
-    { label: "Connaught Place, New Delhi", value: [77.2167, 28.6315] },
+    { label: "Red Fort, Delhi", value: [77.2410, 28.6562] },
+    { label: "Qutub Minar, New Delhi", value: [77.1855, 28.5244] },
     { label: "India Gate, New Delhi", value: [77.2295, 28.6129] },
-    { label: "Karol Bagh, New Delhi", value: [77.1910, 28.6520] },
-    { label: "Lodhi Garden, New Delhi", value: [77.2320, 28.5904] },
+    { label: "Humayun’s Tomb, New Delhi", value: [77.2507, 28.5933] },
+    { label: "Lotus Temple, New Delhi", value: [77.2588, 28.5535] },
+    { label: "Akshardham Temple, New Delhi", value: [77.2773, 28.6127] },
+    { label: "Chandni Chowk, Delhi", value: [77.2281, 28.6506] },
+    { label: "Connaught Place, New Delhi", value: [77.2167, 28.6315] },
+    { label: "Gurudwara Bangla Sahib, New Delhi", value: [77.2091, 28.6264] },
+    { label: "Lodi Gardens, New Delhi", value: [77.2215, 28.5904] },
+    { label: "National Museum, New Delhi", value: [77.2197, 28.6118] },
+    { label: "Jantar Mantar, New Delhi", value: [77.2167, 28.6271] },
+    { label: "Gandhi Smriti, New Delhi", value: [77.2148, 28.6019] },
+    { label: "Dilli Haat, New Delhi", value: [77.2086, 28.5732] },
+    { label: "Chhatarpur Temple, New Delhi", value: [77.1793, 28.5020] },
+    { label: "National Zoological Park, New Delhi", value: [77.2471, 28.6106] },
+    { label: "Nehru Planetarium, New Delhi", value: [77.1979, 28.6046] },
+    { label: "Agrasen ki Baoli, New Delhi", value: [77.2241, 28.6260] },
+    { label: "Dilli Darwaza, New Delhi", value: [77.2403, 28.6416] },
+    { label: "Safdarjung’s Tomb, New Delhi", value: [77.2106, 28.5893] },
+    { label: "Saket, New Delhi", value: [77.2066, 28.5244] },
     { label: "Saket Metro Station, New Delhi", value: [77.2066, 28.5244] },
-    { label: "AIIMS, New Delhi", value: [77.2100, 28.5672] },
     { label: "Noida Sector 62, Uttar Pradesh", value: [77.3639, 28.6219] },
     { label: "DLF Cyber City, Gurugram, Haryana", value: [77.0878, 28.4952] },
     { label: "Indirapuram, Ghaziabad, Uttar Pradesh", value: [77.3735, 28.6362] },
     { label: "Faridabad Sector 15, Haryana", value: [77.3178, 28.4069] },
     { label: "Dwarka Sector 10, New Delhi", value: [77.0589, 28.5812] },
-    { label: "Red Fort, Delhi", value: [77.2410, 28.6562] },
 ];
 
 function LocationSearchInput({ label, onChange, placeholder, mapRef }) {
