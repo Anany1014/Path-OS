@@ -214,7 +214,11 @@ input[type=range]::-moz-range-thumb {
 .ticker-content {
   display: inline-block;
   white-space: nowrap;
-  animation: tickerScroll 50s linear infinite;
+  animation: tickerScroll 120s linear infinite;
+}
+
+.ticker-content:hover {
+  animation-play-state: paused;
 }
 
 /* ─── Neon Pulse Indicator ───────────────────────────────── */

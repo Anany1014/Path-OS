@@ -212,7 +212,7 @@ export default function DualRoutingSelector({ routeMode, setRouteMode, routeData
                         Calculating…
                     </span>
                 ) : (
-                    `Calculate ${routeMode === "pulse" ? "⚡ Pulse" : "🛡️ Haven"} Route`
+                    `Calculate ${routeMode === "pulse" ? "⚡ Fastest" : "🛡️ Haven"} Route`
                 )}
             </button>
 

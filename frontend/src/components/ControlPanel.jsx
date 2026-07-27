@@ -27,10 +27,11 @@ export default function ControlPanel({
     selectedHour, setSelectedHour,
     buildingData, setBuildingData,
     mapRef,
+    user, onLogout,
 }) {
     return (
         <aside
-            className="absolute top-20 left-4 bottom-16 z-[1000] w-80 flex flex-col gap-2 animate-slide-in"
+            className="absolute top-4 left-4 bottom-16 z-[1000] w-80 flex flex-col gap-2 animate-slide-in"
             style={{ maxHeight: "calc(100vh - 96px)" }}
         >
             {/* ── Tab Navigation ── */}
@@ -85,6 +86,25 @@ export default function ControlPanel({
                         setShowSereneZones={setShowSereneZones}
                     />
                 )}
+            </div>
+
+            {/* ── Profile & Logout Footer ── */}
+            <div className="glass-panel rounded-2xl p-3 flex items-center justify-between mt-auto flex-shrink-0">
+                <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center font-bold text-emerald-400 text-xs">
+                        {user ? user[0].toUpperCase() : "OP"}
+                    </div>
+                    <div className="flex flex-col text-left">
+                        <span className="text-[11px] font-semibold text-slate-200">{user || "Operator"}</span>
+                        <span className="text-[9px] text-slate-400">System Command</span>
+                    </div>
+                </div>
+                <button
+                    onClick={onLogout}
+                    className="px-2.5 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-wider text-red-400 bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 active:scale-95 transition-all duration-200"
+                >
+                    Logout
+                </button>
             </div>
         </aside>
     );

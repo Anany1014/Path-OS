@@ -23,6 +23,17 @@ const STATIC_ALERTS = [
 
 export default function AlertTicker({ weatherData, aqiData }) {
     const [tickerItems, setTickerItems] = useState(STATIC_ALERTS);
+    const [timeStr, setTimeStr] = useState("");
+
+    // Continuously running clock
+    useEffect(() => {
+        const updateClock = () => {
+            setTimeStr(new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+        };
+        updateClock();
+        const interval = setInterval(updateClock, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     // Inject live data alerts when environmental props update
     useEffect(() => {
@@ -58,8 +69,8 @@ export default function AlertTicker({ weatherData, aqiData }) {
     return (
         <div
             className={`absolute bottom-0 left-0 right-0 z-[1000] h-9 overflow-hidden flex items-center border-t ${hasSevere
-                    ? "bg-red-950/70 border-red-500/30"
-                    : "bg-slate-900/70 border-white/10"
+                ? "bg-red-950/70 border-red-500/30"
+                : "bg-slate-900/70 border-white/10"
                 } backdrop-blur-lg`}
         >
             {/* LIVE indicator */}
@@ -91,7 +102,7 @@ export default function AlertTicker({ weatherData, aqiData }) {
             {/* Right: timestamp */}
             <div className="flex-shrink-0 px-3 border-l border-white/10 h-full flex items-center">
                 <span className="text-[10px] font-mono text-slate-500">
-                    {new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+                    {timeStr}
                 </span>
             </div>
         </div>

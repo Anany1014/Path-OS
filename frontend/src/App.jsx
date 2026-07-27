@@ -54,6 +54,17 @@ export default function App() {
     // ─── Map Ref (for programmatic panning) ──────────────────────────────
     const [mapRef, setMapRef] = useState(null);
 
+    // ─── Live Clock Running State ────────────────────────────────────────
+    const [timeString, setTimeString] = useState("");
+    useEffect(() => {
+        const updateClock = () => {
+            setTimeString(new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" }));
+        };
+        updateClock();
+        const interval = setInterval(updateClock, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
     // ─── Load spatial + environmental data on mount ───────────────────────
     useEffect(() => {
         // Load mock spatial layer (flood zones, noise, shelters)
@@ -75,6 +86,18 @@ export default function App() {
     // ─── Route callback (passed down to DualRoutingSelector) ─────────────
     const handleRouteResult = useCallback((data) => {
         setRouteData(data);
+        if (data && data.geojson?.coordinates) {
+            const coords = data.geojson.coordinates;
+            if (coords.length > 0) {
+                const dest = coords[coords.length - 1]; // last waypoint: [lng, lat]
+                fetchWeather(dest[1], dest[0])
+                    .then(setWeatherData)
+                    .catch((e) => console.warn("[App] Dynamic weather failed:", e.message));
+                fetchAQI(dest[1], dest[0])
+                    .then(setAqiData)
+                    .catch((e) => console.warn("[App] Dynamic AQI failed:", e.message));
+            }
+        }
     }, []);
 
     // ─── If not logged in: render Login screen ───────────────────────────
@@ -115,14 +138,8 @@ export default function App() {
 
             {/* ── Top Header Bar ── */}
             <header className="absolute top-0 left-0 right-0 z-[1000] flex items-center justify-between px-4 py-3 pointer-events-none">
-                {/* Left: Online indicator (sitting nicely above the left sidebar) */}
-                <div className="glass-panel rounded-2xl px-4 py-2 pointer-events-auto flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-xs text-slate-300">Live</span>
-                    <span className="text-xs text-slate-500 font-mono">
-                        {new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
-                    </span>
-                </div>
+                {/* Left: Offset space for left aligned sidebar */}
+                <div className="w-80" />
 
                 {/* Center: Weather + AQI strip */}
                 <div className="glass-panel rounded-2xl px-4 py-2 pointer-events-auto flex items-center gap-5">
@@ -151,8 +168,11 @@ export default function App() {
                     )}
                 </div>
 
-                {/* Right: Path OS Logo */}
+                {/* Right: Path OS Logo + Clock */}
                 <div className="glass-panel rounded-2xl px-4 py-2 pointer-events-auto flex items-center gap-3">
+                    <span className="text-xs text-slate-400 font-mono pr-2 border-r border-white/10">
+                        {timeString}
+                    </span>
                     <div className="w-7 h-7 rounded-lg bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center">
                         <svg className="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
@@ -193,6 +213,8 @@ export default function App() {
                 buildingData={buildingData}
                 setBuildingData={setBuildingData}
                 mapRef={mapRef}
+                user={user}
+                onLogout={() => setIsLoggedIn(false)}
             />
 
             {/* ── Alert Ticker (bottom bar) ── */}
