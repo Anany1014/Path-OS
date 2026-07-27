@@ -1,0 +1,257 @@
+/* ============================================================
+   Path OS — Global Stylesheet
+   Tailwind base + glassmorphism design system tokens
+   ============================================================ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base Resets ─────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #050b1a;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* ─── Glassmorphism Utility Classes ──────────────────────── */
+@layer components {
+
+  /* Standard frosted glass panel */
+  .glass-panel {
+    @apply bg-slate-900/50 border border-white/10 backdrop-blur-xl;
+    box-shadow:
+      0 4px 32px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  /* Elevated glass panel (hover state / active modals) */
+  .glass-panel-elevated {
+    @apply bg-slate-800/60 border border-white/20 backdrop-blur-2xl;
+    box-shadow:
+      0 8px 48px rgba(0, 0, 0, 0.6),
+      0 2px 0 rgba(255, 255, 255, 0.05) inset;
+  }
+
+  /* Subtle glass for nested cards */
+  .glass-card {
+    @apply bg-white/5 border border-white/10 backdrop-blur-md rounded-xl;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Neon badge pills */
+  .badge-green {
+    @apply bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+
+  .badge-amber {
+    @apply bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+
+  .badge-red {
+    @apply bg-red-500/20 text-red-300 border border-red-500/30 rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+
+  .badge-orange {
+    @apply bg-orange-500/20 text-orange-300 border border-orange-500/30 rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+
+  .badge-blue {
+    @apply bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full px-2 py-0.5 text-xs font-medium;
+  }
+
+  /* Primary neon button */
+  .btn-neon {
+    @apply relative px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20 hover:border-emerald-400/60 hover:text-emerald-200 active:scale-95;
+    box-shadow: 0 0 12px rgba(16, 245, 160, 0.1);
+  }
+
+  .btn-neon:hover {
+    box-shadow: 0 0 20px rgba(16, 245, 160, 0.25);
+  }
+
+  /* Amber (Haven) button */
+  .btn-haven {
+    @apply relative px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200 bg-amber-500/10 border border-amber-500/40 text-amber-300 hover:bg-amber-500/20 hover:border-amber-400/60 hover:text-amber-200 active:scale-95;
+    box-shadow: 0 0 12px rgba(255, 186, 8, 0.1);
+  }
+
+  .btn-haven:hover {
+    box-shadow: 0 0 20px rgba(255, 186, 8, 0.25);
+  }
+
+  /* Active route mode button */
+  .btn-active-pulse {
+    @apply bg-emerald-500/25 border-emerald-400/70 text-emerald-100;
+    box-shadow: 0 0 24px rgba(16, 245, 160, 0.35), 0 0 8px rgba(16, 245, 160, 0.2);
+  }
+
+  .btn-active-haven {
+    @apply bg-amber-500/25 border-amber-400/70 text-amber-100;
+    box-shadow: 0 0 24px rgba(255, 186, 8, 0.35), 0 0 8px rgba(255, 186, 8, 0.2);
+  }
+
+  /* Section header label */
+  .section-label {
+    @apply text-xs font-semibold tracking-widest uppercase text-slate-400 mb-2;
+  }
+
+  /* Custom range slider track */
+  .slider-track {
+    @apply w-full h-1.5 rounded-full bg-white/10 appearance-none cursor-pointer;
+  }
+}
+
+/* ─── Scrollbar Styling ──────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ─── Leaflet Map Overrides ──────────────────────────────── */
+/* Ensure map fills container perfectly */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: #0a1628 !important;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Dark-tinted tile layer for the Crisis Command Center look */
+.leaflet-tile-pane {
+  filter: brightness(0.55) saturate(0.7) hue-rotate(185deg);
+}
+
+/* Popup styling */
+.leaflet-popup-content-wrapper {
+  background: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+}
+
+.leaflet-popup-tip {
+  background: rgba(15, 23, 42, 0.85) !important;
+}
+
+.leaflet-popup-close-button {
+  color: #94a3b8 !important;
+}
+
+/* ─── Range Input Styling ────────────────────────────────── */
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 99px;
+  height: 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #10F5A0;
+  box-shadow: 0 0 10px rgba(16, 245, 160, 0.6);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #10F5A0;
+  box-shadow: 0 0 10px rgba(16, 245, 160, 0.6);
+  cursor: pointer;
+  border: none;
+}
+
+/* ─── Ticker Animation ───────────────────────────────────── */
+@keyframes tickerScroll {
+  0% {
+    transform: translateX(100vw);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: tickerScroll 50s linear infinite;
+}
+
+/* ─── Neon Pulse Indicator ───────────────────────────────── */
+@keyframes pulseNeon {
+
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 6px #FF3B3B;
+  }
+
+  50% {
+    opacity: 0.5;
+    box-shadow: 0 0 20px #FF3B3B, 0 0 40px #FF3B3B40;
+  }
+}
+
+.pulse-red {
+  animation: pulseNeon 1.8s ease-in-out infinite;
+}
+
+/* ─── Compass Needle ─────────────────────────────────────── */
+.compass-needle {
+  transition: transform 0.3s ease-out;
+  transform-origin: center bottom;
+}
+
+/* ─── Tab Active State ───────────────────────────────────── */
+.tab-btn {
+  @apply px-3 py-2 text-xs font-medium rounded-lg text-slate-400 transition-all duration-200 hover:text-white hover:bg-white/5;
+}
+
+.tab-btn.active {
+  @apply text-white bg-white/10 border border-white/15;
+}
+
+/* ─── Input Fields ───────────────────────────────────────── */
+.glass-input {
+  @apply w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 outline-none transition-all duration-200 focus:border-emerald-500/50 focus:bg-white/10 focus:ring-1 focus:ring-emerald-500/20;
+}

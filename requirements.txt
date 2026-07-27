@@ -1,0 +1,16 @@
+# Path OS System & Environmental Requirements
+# Since Path OS is a Node.js/Express and React application, detailed dependencies are managed via package.json files.
+
+Node.js >= 18.0.0
+npm >= 9.0.0
+Express.js >= 4.18
+React >= 18.2
+Vite >= 5.4
+Leaflet >= 1.9
+
+# External APIs (Public free tiers)
+Open-Meteo API (Weather data)
+OpenAQ API v3 (Air Quality measurements)
+OpenStreetMap Overpass API (Building structures)
+OSRM public demo API (Pulse routing)
+OpenRouteService API (Haven routing)
