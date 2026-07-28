@@ -141,10 +141,8 @@ body,
   font-family: 'Inter', sans-serif;
 }
 
-/* Dark-tinted tile layer for the Crisis Command Center look */
-.leaflet-tile-pane {
-  filter: brightness(0.55) saturate(0.7) hue-rotate(185deg);
-}
+/* CartoDB Dark Matter tiles natively match the HUD theme — no filter needed */
+
 
 /* Popup styling */
 .leaflet-popup-content-wrapper {

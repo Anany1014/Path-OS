@@ -75,7 +75,7 @@ function sunAzimuth(hour) {
     return 70 + ((hour - 6) / 12) * 220;
 }
 
-// ─── Compute shadow polygon for one building ─────────────────────────────────
+// ─── Compute shadow polygon for one building ────────────────────────────────
 // Returns a leaflet [lat, lon] polygon array representing the shadow.
 // Shadow formula: L = h * cot(θ) where θ = sun elevation in radians
 function buildShadowPolygon(building, hour) {
@@ -84,14 +84,19 @@ function buildShadowPolygon(building, hour) {
     const elevRad = (elevDeg * Math.PI) / 180;
     const azimRad = (azimDeg * Math.PI) / 180;
 
-    // Shadow length in degrees of lat/lon (1° ≈ 111km at equator)
+    // Shadow length in degrees: latitude is constant, longitude shrinks at higher latitudes
     const L_meters = building.height / Math.tan(elevRad);
-    const L_deg = L_meters / 111000;
+    const L_lat_deg = L_meters / 111000; // approx for latitude at all latitudes
+
+    // Reference latitude for longitude correction (use first footprint point)
+    const refLat = building.footprint[0]?.[1] ?? 28.6;
+    const latRad = (refLat * Math.PI) / 180;
+    const L_lon_deg = L_lat_deg / Math.cos(latRad); // correct for longitude compression
 
     // Shadow cast opposite to sun direction (azimuth + 180°)
     const shadowAzim = azimRad + Math.PI;
-    const dLon = L_deg * Math.sin(shadowAzim);
-    const dLat = L_deg * Math.cos(shadowAzim);
+    const dLon = L_lon_deg * Math.sin(shadowAzim);
+    const dLat = L_lat_deg * Math.cos(shadowAzim);
 
     // Offset each footprint vertex in the shadow direction
     const footprint = building.footprint; // [[lng, lat], ...]
@@ -103,6 +108,20 @@ function buildShadowPolygon(building, hour) {
 function MapReadyBridge({ onMapReady }) {
     const map = useMap();
     useEffect(() => { if (onMapReady) onMapReady(map); }, [map, onMapReady]);
+    return null;
+}
+
+// ─── Auto-fit to route bounds when a new route is drawn ──────────────────────
+function RouteFitter({ routeCoords }) {
+    const map = useMap();
+    useEffect(() => {
+        if (routeCoords.length > 1) {
+            try {
+                const bounds = L.latLngBounds(routeCoords);
+                map.fitBounds(bounds, { padding: [60, 60] });
+            } catch (_) { /* no-op if bounds invalid */ }
+        }
+    }, [routeCoords, map]);
     return null;
 }
 
@@ -156,10 +175,11 @@ export default function MapCanvas({
             zoomControl={false}
             style={{ position: "absolute", inset: 0, zIndex: 0 }}
         >
-            {/* ── OSM Base Tiles ── */}
+            {/* ── CartoDB Dark Matter Tiles (matches HUD theme) ── */}
             <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://carto.com/attributions">CartoDB</a> | &copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+                url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                subdomains="abcd"
                 maxZoom={19}
             />
 
@@ -265,6 +285,9 @@ export default function MapCanvas({
                     </Popup>
                 </Polygon>
             ))}
+
+            {/* ── Auto-fit map to route ── */}
+            <RouteFitter routeCoords={routeCoords} />
 
             {/* ── Route Polyline ── */}
             {routeCoords.length > 0 && (

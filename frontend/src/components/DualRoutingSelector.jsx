@@ -131,6 +131,15 @@ export default function DualRoutingSelector({ routeMode, setRouteMode, routeData
     const [destinationCoords, setDestinationCoords] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [routeResult, setRouteResult] = useState(null);
+    const [fallbackUsed, setFallbackUsed] = useState(false);
+
+    // Clear fallback warning + result when mode is switched
+    const handleSetRouteMode = (mode) => {
+        setRouteMode(mode);
+        setFallbackUsed(false);
+        setRouteResult(null);
+    };
 
     const handleCalculate = async () => {
         if (!originCoords || !destinationCoords) {
@@ -140,8 +149,11 @@ export default function DualRoutingSelector({ routeMode, setRouteMode, routeData
 
         setIsLoading(true);
         setError(null);
+        setFallbackUsed(false);
         try {
             const data = await fetchRoute(originCoords, destinationCoords, routeMode);
+            setRouteResult(data);
+            setFallbackUsed(!!data.fallbackUsed);
             onRouteResult(data);
         } catch (err) {
             setError("Route calculation failed. Check that the backend is running.");
@@ -162,7 +174,7 @@ export default function DualRoutingSelector({ routeMode, setRouteMode, routeData
             {/* ── Mode Toggle ── */}
             <div className="glass-card p-1 flex gap-1 rounded-xl">
                 <button
-                    onClick={() => setRouteMode("pulse")}
+                    onClick={() => handleSetRouteMode("pulse")}
                     className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200 ${routeMode === "pulse"
                         ? "bg-emerald-500/25 border border-emerald-400/50 text-emerald-200 shadow-[0_0_20px_rgba(16,245,160,0.3)]"
                         : "text-slate-400 hover:text-white"
@@ -172,7 +184,7 @@ export default function DualRoutingSelector({ routeMode, setRouteMode, routeData
                     <span className="text-[9px] opacity-60 font-normal">Fastest</span>
                 </button>
                 <button
-                    onClick={() => setRouteMode("haven")}
+                    onClick={() => handleSetRouteMode("haven")}
                     className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all duration-200 ${routeMode === "haven"
                         ? "bg-amber-500/25 border border-amber-400/50 text-amber-200 shadow-[0_0_20px_rgba(255,186,8,0.3)]"
                         : "text-slate-400 hover:text-white"
@@ -192,6 +204,19 @@ export default function DualRoutingSelector({ routeMode, setRouteMode, routeData
                     ? "⚡ Fastest path via OSRM. Optimizes for pure speed and distance."
                     : "🛡️ Haven avoids flooded underpasses, smog zones, and high-noise corridors via ORS."}
             </div>
+
+            {/* ── Haven Fallback Warning ── */}
+            {fallbackUsed && routeMode === "haven" && (
+                <div className="flex items-start gap-2 rounded-lg px-3 py-2.5 border border-orange-500/40 bg-orange-500/10 text-orange-300 text-xs animate-fade-in">
+                    <span className="text-base mt-0.5 flex-shrink-0">⚠️</span>
+                    <div>
+                        <div className="font-semibold">Haven Protection Unavailable</div>
+                        <div className="text-orange-400/80 text-[10px] mt-0.5">
+                            Safe-routing service (ORS) is unreachable. A standard fastest route is shown — hazard avoidance is <span className="font-bold text-orange-300">inactive</span> for this trip.
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Nominatim Search Inputs */}
             <div className="flex flex-col gap-2">

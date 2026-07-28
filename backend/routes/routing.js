@@ -41,7 +41,7 @@ function buildAvoidPolygons(severityFilter = ["chest", "knee"]) {
     });
 
     return {
-        type: "multipolygon",
+        type: "MultiPolygon",
         coordinates: polygons.map((p) => p.coordinates),
     };
 }
@@ -121,6 +121,7 @@ router.post("/", async (req, res) => {
     try {
         let routeData;
         let avoidedFloodZones = 0;
+        let fallbackUsed = false;
 
         if (mode === "haven") {
             // Count how many flood zones we'd avoid
@@ -131,12 +132,13 @@ router.post("/", async (req, res) => {
             const avoidPolygons = buildAvoidPolygons(["chest", "knee"]);
 
             try {
-                // Attempt ORS first
+                // Attempt ORS first (valid MultiPolygon GeoJSON per RFC 7946)
                 routeData = await fetchORSRoute(origin, destination, avoidPolygons);
             } catch (orsError) {
                 console.warn("[routing] ORS failed, falling back to OSRM:", orsError.message);
-                // Fallback to OSRM (same geometry, but we label it as "haven" for the empathy score)
+                // Fallback to OSRM — hazard avoidance is NOT active in this case
                 routeData = await fetchOSRMRoute(origin, destination);
+                fallbackUsed = true; // Signal to the UI that this route is unprotected
             }
         } else {
             // Pulse: fastest standard route
@@ -148,6 +150,7 @@ router.post("/", async (req, res) => {
         return res.json({
             success: true,
             mode,
+            fallbackUsed,
             geojson: routeData.geojson,
             distanceKm: routeData.distanceKm,
             durationMin: routeData.durationMin,

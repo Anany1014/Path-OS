@@ -45,6 +45,13 @@ export default function ShadeSeeker({
         setIsFetching(true);
         setFetchError(null);
 
+        // ── Zoom guard: prevent massive Overpass queries at city-level zoom ──
+        if (mapRef && mapRef.getZoom && mapRef.getZoom() < 14) {
+            setFetchError("Please zoom in closer (zoom ≥ 14) to load building shadows safely.");
+            setIsFetching(false);
+            return;
+        }
+
         // Get current map viewport bbox, or use Delhi CP as default
         let bbox = "28.60,77.19,28.65,77.25";
         if (mapRef) {
@@ -65,6 +72,7 @@ export default function ShadeSeeker({
             setIsFetching(false);
         }
     }, [mapRef, setBuildingData, setShowShadows]);
+
 
     const sunElev = Math.max(
         75 * Math.cos(((selectedHour - 12.5) / 6) * (Math.PI / 2)),
@@ -161,13 +169,13 @@ export default function ShadeSeeker({
                         onClick={() => { if (buildingData) setShowShadows(!showShadows); }}
                         disabled={!buildingData}
                         className={`relative w-11 h-6 rounded-full transition-all duration-300 border ${showShadows && buildingData
-                                ? "bg-amber-500/30 border-amber-500/50"
-                                : "bg-white/5 border-white/15"
+                            ? "bg-amber-500/30 border-amber-500/50"
+                            : "bg-white/5 border-white/15"
                             } disabled:opacity-40`}
                     >
                         <div className={`absolute top-0.5 w-5 h-5 rounded-full transition-all duration-300 ${showShadows && buildingData
-                                ? "left-5 bg-amber-400 shadow-[0_0_8px_rgba(255,186,8,0.7)]"
-                                : "left-0.5 bg-slate-500"
+                            ? "left-5 bg-amber-400 shadow-[0_0_8px_rgba(255,186,8,0.7)]"
+                            : "left-0.5 bg-slate-500"
                             }`} />
                     </button>
                 </div>
@@ -204,13 +212,13 @@ export default function ShadeSeeker({
                 <button
                     onClick={() => setShowShelters(!showShelters)}
                     className={`relative w-11 h-6 rounded-full transition-all duration-300 border ${showShelters
-                            ? "bg-emerald-500/30 border-emerald-500/50"
-                            : "bg-white/5 border-white/15"
+                        ? "bg-emerald-500/30 border-emerald-500/50"
+                        : "bg-white/5 border-white/15"
                         }`}
                 >
                     <div className={`absolute top-0.5 w-5 h-5 rounded-full transition-all duration-300 ${showShelters
-                            ? "left-5 bg-emerald-400 shadow-[0_0_8px_rgba(16,245,160,0.7)]"
-                            : "left-0.5 bg-slate-500"
+                        ? "left-5 bg-emerald-400 shadow-[0_0_8px_rgba(16,245,160,0.7)]"
+                        : "left-0.5 bg-slate-500"
                         }`} />
                 </button>
             </div>

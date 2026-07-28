@@ -16,10 +16,10 @@ const PORT = process.env.PORT || 3001;
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({
     origin: [
-        "http://localhost:5173",  // Vite dev server
-        "http://localhost:3000",  // CRA fallback
-        /\.vercel\.app$/,         // Vercel production
-        /\.netlify\.app$/,        // Netlify production
+        "http://localhost:5173",                          // Vite dev server
+        "http://localhost:3000",                          // CRA fallback
+        /^https?:\/\/[a-zA-Z0-9-]+\.vercel\.app$/,      // Vercel (anchored, no spoofing)
+        /^https?:\/\/[a-zA-Z0-9-]+\.netlify\.app$/,     // Netlify (anchored, no spoofing)
     ],
     methods: ["GET", "POST"],
     credentials: true,
