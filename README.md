@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](#)
 [![Engine](https://img.shields.io/badge/engine-Node%2FReact-orange.svg?style=flat-square)](#)
 
-Path OS is a full-stack, climate-resilient urban navigation dashboard. The platform orchestrates real-time environmental APIs with static datasets to calculate commuter routing, prioritizing ecological safety and shielding commutors from extreme weather, smog boundaries, high-decibel zones, and urban floodings.
+Path OS is a full-stack, climate-resilient urban navigation dashboard. The platform orchestrates real-time environmental APIs with static datasets to calculate commuter routing, prioritizing ecological safety and shielding commuters from extreme weather, smog boundaries, high-decibel zones, and urban floodings.
 
 ---
 
@@ -23,11 +23,11 @@ graph TD
         A --> F[AirGuard Offline Dashboard]
     end
     subgraph backend ["Backend (Express Orchestrator)"]
-        G[server.js] --> H[/api/spatial]
-        G --> I[/api/route]
-        G --> J[/api/weather]
-        G --> K[/api/aqi]
-        G --> L[/api/overpass]
+        G[server.js] --> H["/api/spatial"]
+        G --> I["/api/route"]
+        G --> J["/api/weather"]
+        G --> K["/api/aqi"]
+        G --> L["/api/overpass"]
     end
     subgraph services ["Upstream API Layer & Local Datasets"]
         M[(Mock PostGIS Spatial Layer)] --> H
